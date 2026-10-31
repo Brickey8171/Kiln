@@ -3707,11 +3707,51 @@ if(typeof module!=='undefined')module.exports=writerBuildDocx;
   fontPanel.addEventListener('keydown',function(e){if(e.key==='Escape'){e.stopPropagation();fontPanel.classList.remove('open');$('fontbrowse').focus()}});
   // Include legacy stored font names in the new selector and keep them renderable.
   prepareDocumentFonts();
+  // Apply an exact point size to the selected text. The browser's fontSize
+  // command only knows sizes 1-7 and rewrites existing sizes unpredictably.
+  function applySizeToSelection(pt){
+    var sel=getSelection();if(!sel.rangeCount)return false;var r=sel.getRangeAt(0);if(r.collapsed||!page.contains(r.commonAncestorContainer))return false;
+    writerHistoryBegin();
+    var targets=[];
+    trackSegments(r).forEach(function(sg){
+      var t=sg.n;if(sg.e<t.length)t.splitText(sg.e);if(sg.s>0)t=t.splitText(sg.s);if(!t.nodeValue)return;
+      var p=t.parentElement,plain=p&&p.tagName==='SPAN'&&p.childNodes.length===1&&Array.from(p.attributes).every(function(a){return a.name==='style'});
+      var target=plain?p:document.createElement('span');
+      if(!plain){t.before(target);target.appendChild(t)}
+      target.style.fontSize=pt+'pt';targets.push(target);
+    });
+    if(!targets.length)return false;
+    // Inner <font size> or sized spans inside a target can no longer override it.
+    targets.forEach(function(x){x.querySelectorAll('[style*="font-size"]').forEach(function(i){i.style.removeProperty('font-size')})});
+    var nr=document.createRange();nr.setStartBefore(targets[0]);nr.setEndAfter(targets[targets.length-1]);sel.removeAllRanges();sel.addRange(nr);saved=nr.cloneRange();
+    after();return true;
+  }
   sizeSel.addEventListener('change',function(){
-    restoreSel();document.execCommand('fontSize',false,'7');var px=this.value+'pt';
-    page.querySelectorAll('font[size="7"]').forEach(function(f){var s=document.createElement('span');s.style.fontSize=px;while(f.firstChild)s.appendChild(f.firstChild);f.parentNode.replaceChild(s,f)});
-    after();
+    var pt=parseFloat(this.value);if(!(pt>0))return;
+    var live=getSelection();if(!(live.rangeCount&&page.contains(live.anchorNode)))restoreSel();else page.focus({preventScroll:true});
+    if(applySizeToSelection(pt))return;
+    // No selection: put an empty sized span at the caret so the next typed text uses this size.
+    var sel=getSelection();if(!sel.rangeCount||!page.contains(sel.anchorNode))return;
+    dropPendingSize();
+    var r=sel.getRangeAt(0),sp=document.createElement('span'),zw=document.createTextNode('\u200B');sp.style.fontSize=pt+'pt';sp.appendChild(zw);
+    var host=r.startContainer.nodeType===1?r.startContainer:r.startContainer.parentElement;
+    if(host&&host.tagName==='SPAN'&&host.textContent==='\u200B'){host.style.fontSize=pt+'pt';sp=host;zw=host.firstChild}else r.insertNode(sp);
+    pendingSize=sp;var c=document.createRange();c.setStart(zw,1);c.collapse(true);sel.removeAllRanges();sel.addRange(c);saved=c.cloneRange();
   });
+  var pendingSize=null;
+  function dropPendingSize(){
+    var sp=pendingSize;pendingSize=null;if(!sp||!sp.isConnected)return;
+    if(sp.textContent==='\u200B')sp.remove();
+  }
+  page.addEventListener('input',function(){
+    var sp=pendingSize;if(!sp)return;if(!sp.isConnected){pendingSize=null;return}
+    var t=sp.firstChild;if(t&&t.nodeType===3&&t.nodeValue.length>1&&t.nodeValue.indexOf('\u200B')>=0){
+      var sel=getSelection(),inT=sel.rangeCount&&sel.anchorNode===t,off=inT?sel.anchorOffset:0,i=t.nodeValue.indexOf('\u200B');
+      t.nodeValue=t.nodeValue.replace(/\u200B/g,'');if(inT){var c=document.createRange();c.setStart(t,Math.max(0,off-(i<off?1:0)));c.collapse(true);sel.removeAllRanges();sel.addRange(c)}
+      pendingSize=null;
+    }
+  });
+  document.addEventListener('selectionchange',function(){var sp=pendingSize;if(!sp)return;var sel=getSelection();if(!sel.rangeCount||!sp.contains(sel.anchorNode))setTimeout(function(){var s2=getSelection();if(pendingSize===sp&&(!s2.rangeCount||!sp.contains(s2.anchorNode)))dropPendingSize()},0)});
   $('fcolor').addEventListener('change',function(){cmd('foreColor',this.value)});
   $('hcolor').addEventListener('change',function(){cmd('hiliteColor',this.value)});
 
@@ -4141,6 +4181,7 @@ if(typeof module!=='undefined')module.exports=writerBuildDocx;
     var fn='';try{fn=document.queryCommandValue('fontName').replace(/["']/g,'').split(',')[0].trim().toLowerCase()}catch(e){}
     var opts=$('font').options;for(var i=0;i<opts.length;i++)if(opts[i].value.toLowerCase()===fn){$('font').selectedIndex=i;break}
     previewFont();updateTableTab();
+    try{var se=selFontEl();if(se&&page.contains(se)&&document.activeElement!==sizeSel){var cpt=Math.round(parseFloat(getComputedStyle(se).fontSize)*0.75*2)/2,ov=String(cpt),has=Array.from(sizeSel.options).some(function(o){return o.value===ov&&!o.dataset.custom});var cust=sizeSel.querySelector('option[data-custom]');if(!has){if(!cust){cust=document.createElement('option');cust.dataset.custom='1';sizeSel.insertBefore(cust,sizeSel.firstChild)}cust.value=ov;cust.textContent=ov;cust.hidden=false}else if(cust)cust.hidden=true;sizeSel.value=ov}}catch(e){}
   }
   function pages(){return Math.max(1,sheetNodes().length)}
   function curPage(){var sheets=sheetNodes(),sel=getSelection(),anchor=sel.anchorNode;for(var i=0;i<sheets.length;i++)if(anchor&&sheets[i].contains(anchor))return i+1;var y=sc.getBoundingClientRect().top+Math.min(sc.clientHeight/2,240);for(var j=0;j<sheets.length;j++)if(sheets[j].getBoundingClientRect().bottom>y)return j+1;return Math.max(1,sheets.length)}
@@ -5511,11 +5552,17 @@ if(typeof module!=='undefined')module.exports=writerBuildDocx;
   }
   $('casebtn').addEventListener('click',function(){toggleMenu($('casemenu'),this)});
   $('casemenu').querySelectorAll('[data-case]').forEach(function(b){b.addEventListener('click',function(){closeMenu();changeCase(this.dataset.case)})});
+  // The element whose font size represents the selection (first selected text, not its paragraph).
+  function selFontEl(){
+    var sel=getSelection();if(!sel.rangeCount)return null;var r=sel.getRangeAt(0),n=r.startContainer;
+    if(n.nodeType===1){var c=n.childNodes[r.startOffset]||n.lastChild;if(c&&!r.collapsed){var w=document.createTreeWalker(c.nodeType===1?c:c.parentNode,NodeFilter.SHOW_TEXT),t=c.nodeType===3?c:w.nextNode();if(t)n=t}else if(c&&r.collapsed&&r.startOffset>0){var prev=n.childNodes[r.startOffset-1];if(prev)n=prev.nodeType===3?prev:(prev.lastChild||prev)}}
+    var el=n&&(n.nodeType===1?n:n.parentElement);return el&&page.contains(el)?el:null;
+  }
   function stepFont(dir){
     restoreSel();var sel=getSelection();if(!sel.rangeCount)return;
     expandToWord(sel);if(sel.isCollapsed)return;saveSel();
-    var node=sel.anchorNode,el=node&&(node.nodeType===1?node:node.parentElement);if(!el||!page.contains(el))return;
-    var pt=parseFloat(getComputedStyle(el).fontSize)*0.75,sizes=Array.from(sizeSel.options).map(function(o){return +o.value});
+    var el=selFontEl();if(!el)return;
+    var pt=parseFloat(getComputedStyle(el).fontSize)*0.75,sizes=Array.from(sizeSel.options).filter(function(o){return !o.dataset.custom}).map(function(o){return +o.value});
     var next=dir>0?sizes.find(function(v){return v>pt+0.05}):sizes.slice().reverse().find(function(v){return v<pt-0.05});
     if(!next)return;
     sizeSel.value=String(next);sizeSel.dispatchEvent(new Event('change'));
