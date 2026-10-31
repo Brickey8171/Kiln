@@ -890,6 +890,34 @@ body.readmode.read-inverse #page{filter:invert(1) hue-rotate(180deg)}
 #p-picture.is-shape .shape-only{display:flex}
 #mm-rec{width:44px;height:24px;text-align:center;border:1px solid var(--fieldline);border-radius:3px;background:var(--field);color:var(--text)}
 
+
+/* colour palettes, online pictures */
+.grp .i.dd{width:13px;font-size:9px;margin-left:-2px}
+.editor-popup .kpal{width:236px;padding:2px 4px}
+.editor-popup .kpal .pal-title{font-weight:600;color:var(--muted);font-size:11.5px;padding:8px 2px 4px}
+.editor-popup .kpal .pal-grid{display:grid;grid-template-columns:repeat(10,20px);gap:3px 3px}
+.editor-popup .kpal .pal-grid.tints{gap:0 3px;margin-top:5px}
+.editor-popup .kpal .pal-grid.hl{grid-template-columns:repeat(5,20px);gap:4px}
+.editor-popup .kpal button.sw{width:20px;height:20px;min-height:0;padding:0;border:1px solid rgba(0,0,0,.18);border-radius:3px}
+.editor-popup .kpal .pal-grid.tints button.sw{height:16px;border-radius:0}
+.editor-popup .kpal button.sw:hover{outline:2px solid var(--blue);outline-offset:1px;background-image:none}
+.editor-popup .kpal .pal-auto,.editor-popup .kpal .pal-more{justify-content:flex-start;gap:10px;margin:2px 0}
+.editor-popup .kpal .pal-auto i{width:16px;height:16px;border-radius:50%;display:block;border:1px solid rgba(0,0,0,.25)}
+.editor-popup .kpal .pal-auto i.none{background:linear-gradient(135deg,#fff 45%,#d00 45%,#d00 55%,#fff 55%)}
+.editor-popup .kpal .pal-more{border-top:1px solid var(--ribline);border-radius:0;margin-top:8px;padding-top:8px}
+.editor-popup .kpal .pal-more svg{width:16px;height:16px}
+#minitb .mini-dd{width:12px;font-size:9px;margin-left:-3px}
+#minitb button.on{background:var(--active)}
+.op-bar{display:flex;gap:8px}
+.op-bar input{flex:1}
+.op-bar select{width:auto!important;flex:none}
+.op-bar button{border:1px solid var(--blue);background:var(--blue);color:#fff;border-radius:4px;padding:4px 14px;cursor:pointer;font:inherit}
+.op-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;max-height:52vh;overflow:auto;margin-top:10px}
+.op-card{position:relative;border:1px solid var(--ribline);border-radius:6px;padding:0;background:#f3f3f3;cursor:pointer;height:110px;overflow:hidden}
+.op-card img{width:100%;height:100%;object-fit:cover;display:block}
+.op-card span{position:absolute;left:0;right:0;bottom:0;background:rgba(0,0,0,.55);color:#fff;font-size:10px;padding:2px 5px;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.op-card span:empty{display:none}
+.op-card:hover{outline:2px solid var(--blue)}
 /* Document themes (Design tab) */
 #page{--doc-head-font:"Calibri Light",Carlito,Calibri,Arial,sans-serif;--doc-body-font:Calibri,Carlito,"Segoe UI",Arial,sans-serif;--doc-accent:#2f5496;--doc-accent2:#1f3763;font-family:var(--doc-body-font)}
 #page h1,#page h2,#page h4,#page h5,#page h6,#page p[data-writer-toc="title"]{font-family:var(--doc-head-font);color:var(--doc-accent)}
@@ -957,8 +985,8 @@ body.readmode.read-inverse #page{filter:invert(1) hue-rotate(180deg)}
         <button class="i" data-cmd="subscript" title="Subscript" style="font-size:12px">x<sub>2</sub></button>
         <button class="i" data-cmd="superscript" title="Superscript" style="font-size:12px">x<sup>2</sup></button><button class="i" id="fxbtn" title="Text effects" aria-haspopup="true" aria-expanded="false" data-ic="fxtext"></button><button class="i" id="fontdlgbtn" title="Font settings (Ctrl+D)" data-ic="fontdlg"></button>
         <span class="sep"></span>
-        <label class="clr" title="Highlight colour"><span class="g" style="font-size:12px">ab</span><input type="color" id="hcolor" value="#ffff00"></label>
-        <label class="clr" title="Font colour"><span class="g">A</span><input type="color" id="fcolor" value="#c00000"></label>
+        <label class="clr" title="Highlight colour"><span class="g" style="font-size:12px">ab</span><input type="color" id="hcolor" value="#ffff00"></label><button class="i dd" id="hcolormenu" title="Highlight colour menu" aria-haspopup="true" aria-expanded="false">▾</button>
+        <label class="clr" title="Font colour"><span class="g">A</span><input type="color" id="fcolor" value="#c00000"></label><button class="i dd" id="fcolormenu" title="Font colour menu" aria-haspopup="true" aria-expanded="false">▾</button>
         <button class="i" data-cmd="removeFormat" title="Clear all formatting" style="font-size:12px">A<span style="font-size:9px;color:#c00">✕</span></button>
       </div></div><div class="lbl">Font</div></div>
     <div class="grp"><div class="body">
@@ -976,7 +1004,7 @@ body.readmode.read-inverse #page{filter:invert(1) hue-rotate(180deg)}
   <!-- INSERT -->
   <div class="panel" id="p-insert">
     <div class="grp"><div class="body"><div class="bigrow"><button class="big" id="tbl" title="Insert a table" aria-haspopup="true" aria-expanded="false"><span data-ic="table"></span>Table ▾</button></div></div><div class="lbl">Tables</div></div>
-    <div class="grp"><div class="body"><div class="bigrow"><button class="big" id="img"><span data-ic="image"></span>Picture</button><button class="big" id="shapesbtn" title="Insert a shape" aria-haspopup="true" aria-expanded="false"><span data-ic="shapes"></span>Shapes ▾</button><button class="big" id="iconsbtn" title="Insert an icon" aria-haspopup="true" aria-expanded="false"><span data-ic="iconsic"></span>Icons ▾</button><button class="big" id="smartartbtn" title="Insert a SmartArt diagram"><span data-ic="smartart"></span>SmartArt</button><button class="big" id="chartbtn" title="Insert a chart"><span data-ic="chart"></span>Chart</button></div></div><div class="lbl">Illustrations</div></div>
+    <div class="grp"><div class="body"><div class="bigrow"><button class="big" id="img" title="Insert a picture from this device or the web" aria-haspopup="true" aria-expanded="false"><span data-ic="image"></span>Pictures ▾</button><button class="big" id="shapesbtn" title="Insert a shape" aria-haspopup="true" aria-expanded="false"><span data-ic="shapes"></span>Shapes ▾</button><button class="big" id="iconsbtn" title="Insert an icon" aria-haspopup="true" aria-expanded="false"><span data-ic="iconsic"></span>Icons ▾</button><button class="big" id="smartartbtn" title="Insert a SmartArt diagram"><span data-ic="smartart"></span>SmartArt</button><button class="big" id="chartbtn" title="Insert a chart"><span data-ic="chart"></span>Chart</button></div></div><div class="lbl">Illustrations</div></div>
     <div class="grp"><div class="body"><div class="bigrow"><button class="big" id="lnk"><span data-ic="link"></span>Link</button><button class="big" id="bookmarkbtn" title="Add, find or delete bookmarks"><span data-ic="bookmark"></span>Bookmark</button><button class="big" id="xrefbtn" title="Refer to a heading, bookmark, footnote or caption"><span data-ic="crossref"></span>Cross-reference</button></div></div><div class="lbl">Links</div></div><div class="grp"><div class="body"><div class="bigrow"><button class="big" id="inscomment" title="Comment on the selected text (Ctrl+Alt+M)"><span data-ic="comment"></span>Comment</button></div></div><div class="lbl">Comments</div></div>
     <div class="grp"><div class="body"><div class="bigrow"><button class="big" id="textboxbtn" title="Insert a text box" aria-haspopup="true" aria-expanded="false"><span data-ic="textbox"></span>Text Box ▾</button><button class="big" id="quickpartsbtn" title="Reusable pieces of content and document properties" aria-haspopup="true" aria-expanded="false"><span data-ic="quickparts"></span>Quick Parts ▾</button><button class="big" id="wordartbtn" title="Insert decorative text" aria-haspopup="true" aria-expanded="false"><span data-ic="wordart"></span>WordArt ▾</button><button class="big" id="dropcapbtn" title="Large first letter" aria-haspopup="true" aria-expanded="false"><span data-ic="dropcap"></span>Drop Cap ▾</button><div class="smcol"><button class="i sm" id="sigbtn" title="Insert a signature line"><span data-ic="signature"></span>Signature Line</button><button class="i sm" id="insertdate" title="Insert the current date or an automatically updating date"><span data-ic="calendar"></span>Date &amp; Time</button><button class="i sm" id="objectbtn" title="Insert text from a file" aria-haspopup="true" aria-expanded="false"><span data-ic="object"></span>Object ▾</button></div></div></div><div class="lbl">Text</div></div><div class="grp"><div class="body"><div class="bigrow"><button class="big" id="equationbtn" title="Insert an equation" aria-haspopup="true" aria-expanded="false"><span data-ic="equation"></span>Equation ▾</button><button class="big" id="symbolbtn" aria-haspopup="true" aria-expanded="false" title="Insert a symbol or special character"><span data-ic="symbol"></span>Symbol</button></div></div><div class="lbl">Symbols</div></div>
     <div class="grp"><div class="body"><div class="bigrow"><button class="big" id="hfheader" title="Edit the page header"><span data-ic="header"></span>Header</button><button class="big" id="hffooter" title="Edit the page footer"><span data-ic="footer"></span>Footer</button><button class="big" id="hfpagenum" title="Add page numbers to the footer"><span data-ic="pagenum"></span>Page number</button></div></div><div class="lbl">Header &amp; Footer</div></div><div class="grp" style="border-right:0"><div class="body"><div class="bigrow"><button class="big" id="hr" title="Insert page break (Ctrl / Cmd + Enter)"><span data-ic="pagebreak"></span>Page break</button><button class="big" id="blankpage" title="Insert a blank page at the cursor"><span data-ic="blankpage"></span>Blank Page</button><button class="big" id="coverbtn" aria-haspopup="true" aria-expanded="false" title="Add a designed cover page at the start"><span data-ic="cover"></span>Cover Page ▾</button><button class="big" id="hrline" title="Insert a horizontal line (or type --- and press Enter)"><span data-ic="hline"></span>Horizontal Line</button></div></div><div class="lbl">Pages</div></div>
@@ -9034,7 +9062,7 @@ if(typeof module!=='undefined')module.exports=writerBuildDocx;
     mini.append(fontSel,sizeSel);
     var proxies=[['growfont','A▲','Grow Font'],['shrinkfont','A▼','Shrink Font'],['[data-cmd=bold]','<b>B</b>','Bold'],['[data-cmd=italic]','<i>I</i>','Italic'],['[data-cmd=underline]','<u>U</u>','Underline'],['hcolor','<span style="display:flex;flex-direction:column;align-items:center;line-height:1">ab<i class="bar" style="background:#ffff00"></i></span>','Highlight'],['fcolor','<span style="display:flex;flex-direction:column;align-items:center;line-height:1">A<i class="bar" style="background:#c00000"></i></span>','Font Color'],['[data-cmd=insertUnorderedList]',svgIcon('ul'),'Bullets'],['[data-cmd=insertOrderedList]',svgIcon('ol'),'Numbering'],['newcomment',svgIcon('comment'),'New Comment']];
     proxies.forEach(function(p){
-      var b=document.createElement('button');b.type='button';b.innerHTML=p[1];b.title=T(p[2]);
+      var b=document.createElement('button');b.type='button';b.innerHTML=p[1];b.title=T(p[2]);b.dataset.proxy=p[0];
       b.addEventListener('mousedown',function(e){e.preventDefault()});
       b.addEventListener('click',function(){
         var target=p[0].charAt(0)==='['?document.querySelector('#ribbon button'+p[0]):$(p[0]);if(!target)return;
@@ -9045,6 +9073,10 @@ if(typeof module!=='undefined')module.exports=writerBuildDocx;
     });
     mini.addEventListener('mousedown',function(e){if(e.target.tagName!=='SELECT')e.preventDefault()});
     mini._font=fontSel;mini._size=sizeSel;
+    // Keep the colour bars in sync with the ribbon's current highlight / font colour.
+    var syncMiniColors=function(){Array.from(mini.querySelectorAll('button')).forEach(function(btn,i){var bar=btn.querySelector('.bar'),id=btn.dataset.proxy;if(!bar||!$(id))return;bar.style.background=$(id).value})};
+    ['hcolor','fcolor'].forEach(function(id){$(id).addEventListener('input',syncMiniColors);$(id).addEventListener('change',syncMiniColors)});
+    mini._syncColors=syncMiniColors;syncMiniColors();
   })();
   function positionMini(){
     var sel=getSelection();if(load('kiln-minitb')==='off'||!sel.rangeCount||sel.isCollapsed||!page.contains(sel.anchorNode)||document.body.classList.contains('readmode')||page.getAttribute('contenteditable')==='false'){mini.classList.remove('open');return}
@@ -9052,7 +9084,7 @@ if(typeof module!=='undefined')module.exports=writerBuildDocx;
     mini.classList.add('open');var m=mini.getBoundingClientRect();
     var top=r.top-m.height-10;if(top<sc.getBoundingClientRect().top)top=r.bottom+10;
     mini.style.left=Math.max(6,Math.min(r.left+r.width/2-m.width/2,innerWidth-m.width-6))+'px';mini.style.top=Math.max(4,top)+'px';
-    try{mini._font.value=$('font').value;mini._size.value=$('size').value}catch(e){}
+    try{mini._font.value=$('font').value;mini._size.value=$('size').value;mini._syncColors()}catch(e){}
   }
   page.addEventListener('mouseup',function(e){if(e.button===0)setTimeout(positionMini,10)});
   page.addEventListener('keydown',function(){mini.classList.remove('open')});
@@ -9130,6 +9162,143 @@ if(typeof module!=='undefined')module.exports=writerBuildDocx;
   Object.assign(WRITER_DE,DE8);collectUiTranslations();renderUiLanguage();
   $('ui-language').addEventListener('change',function(){updateA11yState();updateLangState()});
   syncDocUi();setTimeout(function(){updateA11yState();refreshProps()},800);
+
+
+  /* ================= Word-style colour palettes ================= */
+  var THEME_COLS=['#ffffff','#000000','#e7e6e6','#44546a','#4472c4','#ed7d31','#a5a5a5','#ffc000','#5b9bd5','#70ad47'];
+  var STD_COLS=['#c00000','#ff0000','#ffc000','#ffff00','#92d050','#00b050','#00b0f0','#0070c0','#002060','#7030a0'];
+  var HL_COLS=[['#ffff00','Yellow'],['#00ff00','Bright Green'],['#00ffff','Turquoise'],['#ff00ff','Pink'],['#0000ff','Blue'],['#ff0000','Red'],['#000080','Dark Blue'],['#008080','Teal'],['#008000','Green'],['#800080','Violet'],['#800000','Dark Red'],['#808000','Dark Yellow'],['#808080','Gray 50%'],['#c0c0c0','Gray 25%'],['#000000','Black']];
+  function tintRow(c,i){if(c==='#ffffff')return shade(c,[-.05,-.15,-.25,-.35,-.5][i]);if(c==='#000000')return shade(c,[.5,.35,.25,.15,.05][i]);return shade(c,[.8,.6,.4,-.25,-.5][i])}
+  function swatch(c,title,onPick){var b=document.createElement('button');b.type='button';b.className='sw';b.title=title||c;b.setAttribute('aria-label',title||c);b.style.background=c;b.addEventListener('mousedown',function(e){e.preventDefault()});b.addEventListener('click',function(){closeMenu();onPick(c)});return b}
+  function rememberColor(kind,c){var key='kiln-recent-'+kind,l=[];try{l=JSON.parse(load(key)||'[]')}catch(e){}l=[c].concat(l.filter(function(x){return x!==c})).slice(0,10);store(key,JSON.stringify(l))}
+  function recentColors(kind){try{return (JSON.parse(load('kiln-recent-'+kind)||'[]')||[]).filter(function(c){return /^#[0-9a-f]{6}$/i.test(c)})}catch(e){return []}}
+  function applyColor(kind,c){
+    var input=$(kind==='font'?'fcolor':'hcolor');
+    if(c===null){restoreSel();writerHistoryBegin();if(kind==='font'){input.value='#000000';document.execCommand('foreColor',false,'#000000')}else document.execCommand('hiliteColor',false,'transparent');after();if(mini._syncColors)mini._syncColors();return}
+    input.value=c;rememberColor(kind,c);input.dispatchEvent(new Event('change'));
+  }
+  function colorMenu(btn,kind){
+    var wrapEl=document.createElement('div');wrapEl.className='kpal';
+    var top=document.createElement('button');top.type='button';top.className='pal-auto';
+    top.innerHTML=kind==='font'?'<i style="background:#000"></i><span>'+escH(T('Automatic'))+'</span>':'<i class="none"></i><span>'+escH(T('No Color'))+'</span>';
+    top.addEventListener('mousedown',function(e){e.preventDefault()});top.addEventListener('click',function(){closeMenu();applyColor(kind,null)});
+    wrapEl.appendChild(top);
+    var pick=function(c){applyColor(kind,c)};
+    var addTitle=function(t){var d=document.createElement('div');d.className='pal-title';d.textContent=T(t);wrapEl.appendChild(d)};
+    var addGrid=function(cols,cls){var g=document.createElement('div');g.className='pal-grid'+(cls?' '+cls:'');cols.forEach(function(c){g.appendChild(Array.isArray(c)?swatch(c[0],T(c[1]),pick):swatch(c,c,pick))});wrapEl.appendChild(g)};
+    if(kind==='font'){
+      addTitle('Theme Colors');addGrid(THEME_COLS);
+      var tg=document.createElement('div');tg.className='pal-grid tints';
+      for(var i=0;i<5;i++)THEME_COLS.forEach(function(c){var t=tintRow(c,i);tg.appendChild(swatch(t,t,pick))});
+      wrapEl.appendChild(tg);
+      addTitle('Standard Colors');addGrid(STD_COLS);
+    }else{addTitle('Highlight Colors');addGrid(HL_COLS,'hl')}
+    var rec=recentColors(kind);if(rec.length){addTitle('Recent Colors');addGrid(rec)}
+    var more=document.createElement('button');more.type='button';more.className='pal-more';more.innerHTML=svgIcon('colors')+'<span>'+escH(T('More Colors…'))+'</span>';
+    more.addEventListener('mousedown',function(e){e.preventDefault()});
+    more.addEventListener('click',function(){closeMenu();var inp=$(kind==='font'?'fcolor':'hcolor');var once=function(){rememberColor(kind,inp.value);inp.removeEventListener('change',once)};inp.addEventListener('change',once);try{inp.showPicker()}catch(e){inp.click()}});
+    wrapEl.appendChild(more);
+    menu(btn,[{node:wrapEl}]);
+  }
+  $('fcolormenu').addEventListener('click',function(){colorMenu(this,'font')});
+  $('hcolormenu').addEventListener('click',function(){colorMenu(this,'highlight')});
+  /* ================= Mini Toolbar: colour drop-downs and Format Painter ================= */
+  (function(){
+    ['hcolor','fcolor'].forEach(function(id){
+      var b=mini.querySelector('button[data-proxy="'+id+'"]');if(!b)return;
+      var dd=document.createElement('button');dd.type='button';dd.className='mini-dd';dd.textContent='▾';dd.title=T(id==='fcolor'?'Font Color':'Text Highlight Color');dd.setAttribute('aria-haspopup','true');
+      dd.addEventListener('mousedown',function(e){e.preventDefault()});
+      dd.addEventListener('click',function(e){e.stopPropagation();colorMenu(dd,id==='fcolor'?'font':'highlight')});
+      b.after(dd);
+      if(id==='fcolor'){
+        var fp=document.createElement('button');fp.type='button';fp.dataset.proxy='formatpainter';fp.title=T('Format Painter');fp.innerHTML=svgIcon('paintbrush');
+        fp.addEventListener('mousedown',function(e){e.preventDefault()});
+        fp.addEventListener('click',function(){$('formatpainter').click();fp.classList.toggle('on',$('formatpainter').classList.contains('on')||$('formatpainter').getAttribute('aria-pressed')==='true')});
+        fp.addEventListener('dblclick',function(){$('formatpainter').dispatchEvent(new MouseEvent('dblclick',{bubbles:true}))});
+        dd.after(fp);
+      }
+    });
+  })();
+  // A colour menu opened from the Mini Toolbar must not close it.
+  document.addEventListener('pointerdown',function(e){if(kmenu.contains(e.target)&&mini.classList.contains('open'))e.stopPropagation()},true);
+
+  /* ================= Insert Picture: This Device / Online Pictures ================= */
+  (function(){
+    var old=$('img'),btn=old.cloneNode(true);old.replaceWith(btn);
+    btn.addEventListener('mousedown',function(e){e.preventDefault()});
+    btn.addEventListener('click',function(){
+      menu(btn,[{title:'Insert Picture From'},{html:svgIcon('folder')+'<span style="flex:1;margin-left:8px">'+escH(T('This Device…'))+'</span>',onClick:function(){saveSel();$('file').click()}},{html:svgIcon('search')+'<span style="flex:1;margin-left:8px">'+escH(T('Online Pictures…'))+'</span>',onClick:openOnlinePictures}]);
+    });
+  })();
+  function stripTags(h){var d=document.createElement('div');d.innerHTML=String(h||'');return d.textContent.trim()}
+  async function searchOpenverse(q){
+    var r=await fetch('https://api.openverse.org/v1/images/?q='+encodeURIComponent(q)+'&page_size=30&mature=false');if(!r.ok)throw Error('HTTP '+r.status);
+    var j=await r.json();
+    return (j.results||[]).map(function(x){return {thumb:x.thumbnail||x.url,full:x.url,title:x.title||q,creator:x.creator||'',license:(x.license?('CC '+x.license.toUpperCase()+(x.license_version?' '+x.license_version:'')).replace('CC CC0','CC0').replace('CC PDM','Public Domain'):''),page:x.foreign_landing_url||'',w:x.width,h:x.height}});
+  }
+  async function searchCommons(q){
+    var u='https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrnamespace=6&gsrlimit=30&gsrsearch='+encodeURIComponent('filetype:bitmap '+q)+'&prop=imageinfo&iiprop=url|extmetadata|size&iiurlwidth=1200';
+    var r=await fetch(u);if(!r.ok)throw Error('HTTP '+r.status);var j=await r.json(),pages=j.query&&j.query.pages?Object.values(j.query.pages):[];
+    pages.sort(function(a,b){return (a.index||0)-(b.index||0)});
+    return pages.filter(function(p){return p.imageinfo&&p.imageinfo[0]}).map(function(p){var ii=p.imageinfo[0],m=ii.extmetadata||{};return {thumb:ii.thumburl||ii.url,full:ii.thumburl||ii.url,title:(p.title||'').replace(/^File:/,'').replace(/\.[a-z]+$/i,''),creator:stripTags(m.Artist&&m.Artist.value).slice(0,80),license:stripTags(m.LicenseShortName&&m.LicenseShortName.value),page:ii.descriptionurl||'',w:ii.thumbwidth||ii.width,h:ii.thumbheight||ii.height}});
+  }
+  function blobToDataUrl(blob,maxSide){
+    return new Promise(function(res,rej){
+      var url=URL.createObjectURL(blob),im=new Image();
+      im.onload=function(){
+        var w=im.naturalWidth,h=im.naturalHeight,k=Math.min(1,maxSide/Math.max(w,h));
+        var c=document.createElement('canvas');c.width=Math.max(1,Math.round(w*k));c.height=Math.max(1,Math.round(h*k));c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(url);
+        var png=/png|gif|webp/.test(blob.type);try{res({src:c.toDataURL(png?'image/png':'image/jpeg',.9),w:c.width,h:c.height})}catch(e){rej(e)}
+      };
+      im.onerror=function(){URL.revokeObjectURL(url);rej(Error('The picture could not be read.'))};im.src=url;
+    });
+  }
+  async function fetchPicture(item){
+    var tries=[item.full,item.thumb].filter(function(u,i,a){return u&&a.indexOf(u)===i}),lastErr=null;
+    for(var u of tries){try{var r=await fetch(u,{mode:'cors'});if(!r.ok)throw Error('HTTP '+r.status);var b=await r.blob();if(!/^image\//.test(b.type))throw Error('Not a picture');return await blobToDataUrl(b,1600)}catch(e){lastErr=e}}
+    throw lastErr||Error('Download failed');
+  }
+  function openOnlinePictures(){
+    saveSel();
+    var body=dialog({title:'Online Pictures',width:'min(820px,calc(100vw - 24px))',body:
+      '<div class="op-bar"><input id="op-q" placeholder="'+escH(T('Search the web for pictures'))+'" autocomplete="off"><select id="op-src" aria-label="'+escH(T('Source'))+'"><option value="openverse">Openverse</option><option value="commons">Wikimedia Commons</option></select><button type="button" id="op-go" class="k-primary">'+escH(T('Search'))+'</button></div>'
+      +'<div id="op-status" class="note"></div><div id="op-grid" class="op-grid"></div>'
+      +'<label class="ck" style="margin-top:10px"><input type="checkbox" id="op-credit" checked> '+escH(T('Add a credit line under the picture'))+'</label>'
+      +'<p class="note">'+escH(T('Results are openly licensed pictures (Creative Commons or public domain). You are responsible for respecting the license. Your search words are sent to the chosen service.'))+'</p>',
+      buttons:[{label:'Cancel'}],
+      onOpen:function(b){
+        var run=function(){
+          var qv=q(b,'#op-q').value.trim(),grid=q(b,'#op-grid'),st=q(b,'#op-status');if(!qv)return;
+          grid.replaceChildren();st.textContent=T('Searching…');
+          (q(b,'#op-src').value==='commons'?searchCommons(qv):searchOpenverse(qv)).catch(function(e){if(q(b,'#op-src').value!=='commons'){q(b,'#op-src').value='commons';return searchCommons(qv)}throw e}).then(function(items){
+            st.textContent=items.length?'':T('No pictures found. Try other words.');
+            items.forEach(function(it){
+              var card=document.createElement('button');card.type='button';card.className='op-card';card.title=it.title+(it.creator?' — '+it.creator:'')+(it.license?' ('+it.license+')':'');
+              var im=document.createElement('img');im.loading='lazy';im.alt=it.title;im.referrerPolicy='no-referrer';im.src=it.thumb;im.onerror=function(){card.remove()};
+              var cap=document.createElement('span');cap.textContent=it.license||'';card.append(im,cap);
+              card.addEventListener('click',function(){
+                var credit=q(b,'#op-credit').checked;st.textContent=T('Downloading picture…');grid.style.opacity='.5';
+                fetchPicture(it).then(function(pic){
+                  kd.close();restoreSel();
+                  var maxW=Math.min(pic.w/2>200?pic.w/2:pic.w,(layoutTwips().w-(layoutTwips().left||layoutTwips().margin)-(layoutTwips().right||layoutTwips().margin))/15),dh=Math.round(pic.h*maxW/pic.w);
+                  var alt=(it.title+(it.creator?' — '+it.creator:'')).slice(0,280);
+                  html('<img src="'+pic.src+'" alt="'+escH(alt)+'" width="'+Math.round(maxW)+'" height="'+dh+'" style="display:inline;float:none;position:static;vertical-align:baseline">');
+                  if(credit){var imgs=Array.from(page.querySelectorAll('img')).filter(function(x){return x.src===pic.src}),img=imgs[imgs.length-1],blk=img&&img.closest('.writer-sheet > *');
+                    if(blk){var p=document.createElement('p');p.style.fontSize='8pt';p.style.color='#767676';p.innerHTML=escH(T('Picture'))+': '+(it.page?'<a href="'+escH(it.page)+'">'+escH(it.title)+'</a>':escH(it.title))+(it.creator?' '+escH(T('by'))+' '+escH(it.creator):'')+(it.license?', '+escH(it.license):'');blk.after(p);after()}}
+                  say('Picture inserted');
+                }).catch(function(e){grid.style.opacity='';st.textContent=T('This picture can’t be downloaded from its website. Please choose another one.')});
+              });
+              grid.appendChild(card);
+            });
+          }).catch(function(){st.textContent=T('The picture search could not be reached. Check your internet connection.')});
+        };
+        q(b,'#op-go').addEventListener('click',run);
+        q(b,'#op-q').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();e.stopPropagation();run()}});
+        q(b,'#op-src').addEventListener('change',run);
+      }});
+  }
+  Object.assign(WRITER_DE,{'Pictures ▾':'Bilder ▾','Insert a picture from this device or the web':'Bild von diesem Gerät oder aus dem Web einfügen','Automatic':'Automatisch','No Color':'Keine Farbe','Theme Colors':'Designfarben','Standard Colors':'Standardfarben','Highlight Colors':'Hervorhebungsfarben','Recent Colors':'Zuletzt verwendet','More Colors…':'Weitere Farben…','Text Highlight Color':'Texthervorhebungsfarbe','Format Painter':'Format übertragen','Insert Picture From':'Bild einfügen aus','This Device…':'Dieses Gerät…','Online Pictures…':'Onlinebilder…','Online Pictures':'Onlinebilder','Search the web for pictures':'Im Web nach Bildern suchen','Source':'Quelle','Search':'Suchen','Add a credit line under the picture':'Quellenangabe unter dem Bild einfügen','Results are openly licensed pictures (Creative Commons or public domain). You are responsible for respecting the license. Your search words are sent to the chosen service.':'Die Ergebnisse sind frei lizenzierte Bilder (Creative Commons oder gemeinfrei). Bitte beachten Sie die jeweilige Lizenz. Ihre Suchbegriffe werden an den gewählten Dienst gesendet.','No pictures found. Try other words.':'Keine Bilder gefunden. Versuchen Sie andere Begriffe.','Downloading picture…':'Bild wird geladen…','by':'von','Picture inserted':'Bild eingefügt','This picture can’t be downloaded from its website. Please choose another one.':'Dieses Bild lässt sich nicht von seiner Website laden. Bitte wählen Sie ein anderes.','The picture search could not be reached. Check your internet connection.':'Die Bildersuche ist nicht erreichbar. Prüfen Sie Ihre Internetverbindung.','Yellow':'Gelb','Bright Green':'Hellgrün','Turquoise':'Türkis','Pink':'Pink','Dark Blue':'Dunkelblau','Teal':'Blaugrün','Dark Red':'Dunkelrot','Dark Yellow':'Dunkelgelb','Gray 50%':'Grau 50 %','Gray 25%':'Grau 25 %','Black':'Schwarz','Violet':'Violett','Red':'Rot','Blue':'Blau','Green':'Grün','Font colour menu':'Schriftfarbmenü','Highlight colour menu':'Hervorhebungsfarbmenü'});
+  collectUiTranslations();renderUiLanguage();
 
   if(load('writer-comments-open')==='1')setComments(true);else renderComments();
   if(load('kiln-home-startup')!=='off')openHome();
