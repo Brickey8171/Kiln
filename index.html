@@ -3,6 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2b579a">
+<meta name="description" content="Kiln — a complete word processor in your browser. Open and save .docx, export PDF, works offline.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Kiln">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<script>
+/* App manifest and home-screen icon: only when served from a website (an opened local file can't use them). */
+if(/^https?:$/.test(location.protocol)){[['manifest','manifest.webmanifest'],['apple-touch-icon','icons/apple-touch-icon.png']].forEach(function(l){var e=document.createElement('link');e.rel=l[0];e.href=l[1];document.head.appendChild(e)})}
+</script>
 <title>Kiln — documents, fired up</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%232b579a'/%3E%3Cpath d='M4 21V12a8 8 0 0 1 16 0v9z' fill='none' stroke='white' stroke-width='1.8'/%3E%3Cpath d='M12 9.2c2.3 2.2 3.4 3.9 3.4 5.9a3.4 3.4 0 0 1-6.8 0c0-1.1.5-2.1 1.3-2.8.1 1 .6 1.7 1.4 1.9-.4-1.6-.2-3.2.7-5z' fill='%23ff9a3c'/%3E%3C/svg%3E">
 <!-- Optional online display fonts: common fonts and all editing functions still work offline. -->
@@ -78,6 +88,7 @@ select{height:24px;border:1px solid var(--fieldline);border-radius:2px;backgroun
 #linkbar{display:none;background:var(--rib);border-bottom:1px solid var(--ribline);padding:6px 10px;gap:6px;align-items:center}
 #linkbar input{flex:1;height:26px;border:1px solid var(--fieldline);background:var(--field);color:var(--text);padding:0 8px;border-radius:2px;font:inherit}
 #notice{display:none;background:var(--rib);border-bottom:1px solid var(--ribline);padding:6px 10px;gap:8px;align-items:center}
+body:has(#home:not([hidden])) #notice{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:1000;color:var(--text);border:1px solid var(--ribline);border-radius:8px;box-shadow:0 8px 28px #0006;padding:8px 12px;max-width:calc(100vw - 24px)}
 #notice span{flex:1}
 #notice button{height:26px;padding:0 12px;border:1px solid var(--fieldline);background:var(--field);color:var(--text);border-radius:2px;cursor:pointer;font:inherit}
 #msg{font-weight:600}
@@ -966,7 +977,7 @@ body.readmode.read-inverse #page{filter:invert(1) hue-rotate(180deg)}
   <div class="panel" id="p-file">
     <div class="grp"><div class="body"><div class="bigrow"><button class="big" id="homebtn" title="Start screen with your documents and templates"><span data-ic="home"></span>Home</button><button class="big" id="newdoc"><span data-ic="filenew"></span>New</button><button class="big" id="opendoc" title="Open a Word, HTML, Markdown or plain text document"><span data-ic="folder"></span>Open</button><button class="big" id="libbtn" title="All documents saved in this browser"><span data-ic="library"></span>My Documents</button></div></div><div class="lbl">Document</div></div>
     <div class="grp"><div class="body"><div class="bigrow"><button class="big" id="savedoc" title="Save as Word document (Ctrl+S)"><span data-ic="download"></span>Word .docx</button><button class="big" id="savehtml" title="Download an editable HTML copy"><span data-ic="download"></span>HTML</button><button class="big" id="savetxt" title="Download plain text"><span data-ic="download"></span>Text</button><button class="big" id="savemd" title="Download as Markdown"><span data-ic="download"></span>Markdown</button><button class="big" id="savepdf" title="Download a PDF file directly, without the print dialog"><span data-ic="pdf"></span>PDF</button></div></div><div class="lbl">Save</div></div>
-    <div class="grp"><div class="body"><div class="bigrow"><button class="big" id="print" title="Print or save as PDF (Ctrl+P)"><span data-ic="printer"></span>Print / PDF</button></div></div><div class="lbl">Print</div></div><div class="grp" style="border-right:0"><div class="body"><div class="bigrow"><button class="big" id="infobtn" title="Document properties, statistics and inspection"><span data-ic="info"></span>Info</button><button class="big" id="verbtn" title="Earlier versions of this document"><span data-ic="history"></span>Version History</button><button class="big" id="sharebtn" title="Share this document as a Word file"><span data-ic="share"></span>Share</button><button class="big" id="optionsbtn" title="Kiln options"><span data-ic="gear"></span>Options</button></div></div><div class="lbl">Info</div></div>
+    <div class="grp"><div class="body"><div class="bigrow"><button class="big" id="print" title="Print or save as PDF (Ctrl+P)"><span data-ic="printer"></span>Print / PDF</button></div></div><div class="lbl">Print</div></div><div class="grp" style="border-right:0"><div class="body"><div class="bigrow"><button class="big" id="installbtn" hidden title="Install Kiln as an app on this device"><span data-ic="download"></span>Install App</button><button class="big" id="infobtn" title="Document properties, statistics and inspection"><span data-ic="info"></span>Info</button><button class="big" id="verbtn" title="Earlier versions of this document"><span data-ic="history"></span>Version History</button><button class="big" id="sharebtn" title="Share this document as a Word file"><span data-ic="share"></span>Share</button><button class="big" id="optionsbtn" title="Kiln options"><span data-ic="gear"></span>Options</button></div></div><div class="lbl">Info</div></div>
   </div>
   <div class="panel" id="p-draw"><div class="grp"><div class="body"><div class="bigrow"><button class="big" id="drawcanvas" title="Draw with pen, highlighter and eraser, then insert the drawing"><span data-ic="canvas"></span>Drawing Canvas</button></div></div><div class="lbl">Insert</div></div><div class="grp"><div class="body"><div class="bigrow"><button class="big" id="pen-black"><span data-ic="pen"></span>Black Pen</button><button class="big" id="pen-red"><span data-ic="pen"></span>Red Pen</button><button class="big" id="pen-blue"><span data-ic="pen"></span>Blue Pen</button><button class="big" id="pen-green"><span data-ic="pen"></span>Green Pen</button><button class="big" id="pen-hl"><span data-ic="highlighter"></span>Highlighter</button><button class="big" id="pen-eraser"><span data-ic="eraser"></span>Eraser</button></div></div><div class="lbl">Drawing Tools</div></div><div class="grp" style="border-right:0"><div class="body"><div class="row"><span style="min-width:62px">Thickness</span><select id="pen-size" aria-label="Pen thickness"><option value="1">0.5 mm</option><option value="2" selected>1 mm</option><option value="4">2 mm</option><option value="7">3.5 mm</option></select></div><div class="row"><span style="min-width:62px">Colour</span><input type="color" id="pen-color" value="#1f1f1f" aria-label="Pen colour"></div></div><div class="lbl">Pen</div></div></div>
   <div class="panel" id="p-mailings"><div class="grp"><div class="body"><div class="bigrow"><button class="big" id="envbtn" title="Create an envelope"><span data-ic="envelope"></span>Envelopes</button><button class="big" id="labelsbtn" title="Create a sheet of address labels"><span data-ic="labels"></span>Labels</button></div></div><div class="lbl">Create</div></div><div class="grp"><div class="body"><div class="bigrow"><button class="big" id="recipbtn" title="Choose the list of recipients for a mail merge" aria-haspopup="true" aria-expanded="false"><span data-ic="recipients"></span>Select Recipients ▾</button><button class="big" id="editrecip" title="Choose which recipients to include"><span data-ic="editlist"></span>Edit Recipient List</button></div></div><div class="lbl">Start Mail Merge</div></div><div class="grp"><div class="body"><div class="bigrow"><button class="big" id="mmhl"><span data-ic="highlightfields"></span>Highlight Merge Fields</button><button class="big" id="addrblock"><span data-ic="addressblock"></span>Address Block</button><button class="big" id="greeting"><span data-ic="greeting"></span>Greeting Line</button><button class="big" id="mergefieldbtn" aria-haspopup="true" aria-expanded="false"><span data-ic="mergefield"></span>Insert Merge Field ▾</button></div></div><div class="lbl">Write &amp; Insert Fields</div></div><div class="grp"><div class="body"><div class="bigrow"><button class="big" id="mmpreview" title="Show the merged values of a recipient"><span data-ic="preview"></span>Preview Results</button><div class="smcol"><div class="row" style="gap:2px"><button class="i" id="mm-first" title="First record">⏮</button><button class="i" id="mm-prev" title="Previous record">◀</button><input id="mm-rec" value="1" aria-label="Record number"><button class="i" id="mm-next" title="Next record">▶</button><button class="i" id="mm-last" title="Last record">⏭</button></div><div class="row"><span id="mm-count" style="font-size:11px;color:var(--muted)"></span></div></div></div></div><div class="lbl">Preview Results</div></div><div class="grp" style="border-right:0"><div class="body"><div class="bigrow"><button class="big" id="finishbtn" title="Create the merged documents" aria-haspopup="true" aria-expanded="false"><span data-ic="finish"></span>Finish &amp; Merge ▾</button></div></div><div class="lbl">Finish</div></div></div>
@@ -1237,7 +1248,7 @@ body.readmode.read-inverse #page{filter:invert(1) hue-rotate(180deg)}
 </dialog>
 <dialog id="wc-dialog" aria-labelledby="wc-title"><h2 id="wc-title">Word Count</h2><table id="wc-table"></table><div class="wc-actions"><button id="wc-close" type="button">Close</button></div></dialog>
 <div id="home" hidden role="region" aria-label="Start">
-  <div class="home-top"><span class="home-brand"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 21V11a9 9 0 0 1 18 0v10z" fill="#fff" fill-opacity=".14" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/><path d="M3 21h18" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/><path d="M12 9.2c2.3 2.2 3.4 3.9 3.4 5.9a3.4 3.4 0 0 1-6.8 0c0-1.1.5-2.1 1.3-2.8.1 1 .6 1.7 1.4 1.9-.4-1.6-.2-3.2.7-5z" fill="#ff9a3c"/><path d="M12 14.2c.9.9 1.4 1.7 1.4 2.5a1.4 1.4 0 0 1-2.8 0c0-.8.5-1.6 1.4-2.5z" fill="#ffe08a"/></svg>Kiln</span><span class="sp"></span><button id="home-back" type="button">Back to document</button></div>
+  <div class="home-top"><span class="home-brand"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 21V11a9 9 0 0 1 18 0v10z" fill="#fff" fill-opacity=".14" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/><path d="M3 21h18" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/><path d="M12 9.2c2.3 2.2 3.4 3.9 3.4 5.9a3.4 3.4 0 0 1-6.8 0c0-1.1.5-2.1 1.3-2.8.1 1 .6 1.7 1.4 1.9-.4-1.6-.2-3.2.7-5z" fill="#ff9a3c"/><path d="M12 14.2c.9.9 1.4 1.7 1.4 2.5a1.4 1.4 0 0 1-2.8 0c0-.8.5-1.6 1.4-2.5z" fill="#ffe08a"/></svg>Kiln</span><span class="sp"></span><button id="home-install" type="button" hidden>⬇ Install Kiln</button><button id="home-back" type="button">Back to document</button></div>
   <section class="home-hero">
     <div class="hero-text">
       <h1 id="home-title">Welcome to Kiln</h1>
@@ -9300,8 +9311,58 @@ if(typeof module!=='undefined')module.exports=writerBuildDocx;
   Object.assign(WRITER_DE,{'Pictures ▾':'Bilder ▾','Insert a picture from this device or the web':'Bild von diesem Gerät oder aus dem Web einfügen','Automatic':'Automatisch','No Color':'Keine Farbe','Theme Colors':'Designfarben','Standard Colors':'Standardfarben','Highlight Colors':'Hervorhebungsfarben','Recent Colors':'Zuletzt verwendet','More Colors…':'Weitere Farben…','Text Highlight Color':'Texthervorhebungsfarbe','Format Painter':'Format übertragen','Insert Picture From':'Bild einfügen aus','This Device…':'Dieses Gerät…','Online Pictures…':'Onlinebilder…','Online Pictures':'Onlinebilder','Search the web for pictures':'Im Web nach Bildern suchen','Source':'Quelle','Search':'Suchen','Add a credit line under the picture':'Quellenangabe unter dem Bild einfügen','Results are openly licensed pictures (Creative Commons or public domain). You are responsible for respecting the license. Your search words are sent to the chosen service.':'Die Ergebnisse sind frei lizenzierte Bilder (Creative Commons oder gemeinfrei). Bitte beachten Sie die jeweilige Lizenz. Ihre Suchbegriffe werden an den gewählten Dienst gesendet.','No pictures found. Try other words.':'Keine Bilder gefunden. Versuchen Sie andere Begriffe.','Downloading picture…':'Bild wird geladen…','by':'von','Picture inserted':'Bild eingefügt','This picture can’t be downloaded from its website. Please choose another one.':'Dieses Bild lässt sich nicht von seiner Website laden. Bitte wählen Sie ein anderes.','The picture search could not be reached. Check your internet connection.':'Die Bildersuche ist nicht erreichbar. Prüfen Sie Ihre Internetverbindung.','Yellow':'Gelb','Bright Green':'Hellgrün','Turquoise':'Türkis','Pink':'Pink','Dark Blue':'Dunkelblau','Teal':'Blaugrün','Dark Red':'Dunkelrot','Dark Yellow':'Dunkelgelb','Gray 50%':'Grau 50 %','Gray 25%':'Grau 25 %','Black':'Schwarz','Violet':'Violett','Red':'Rot','Blue':'Blau','Green':'Grün','Font colour menu':'Schriftfarbmenü','Highlight colour menu':'Hervorhebungsfarbmenü'});
   collectUiTranslations();renderUiLanguage();
 
+
+  /* ================= Installable app (PWA) ================= */
+  var isStandalone=function(){return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true};
+  var isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  var deferredInstall=null;
+  function setInstallVisible(v){['installbtn','home-install'].forEach(function(id){if($(id))$(id).hidden=!v})}
+  window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferredInstall=e;setInstallVisible(true)});
+  window.addEventListener('appinstalled',function(){deferredInstall=null;setInstallVisible(false);keepStorage();say('Kiln is installed. You can now open it from your apps.')});
+  if(isIOS&&!isStandalone()&&/^https?:$/.test(location.protocol))setInstallVisible(true);
+  async function installApp(){
+    if(deferredInstall){var ev=deferredInstall;deferredInstall=null;ev.prompt();try{var r=await ev.userChoice;if(r.outcome==='accepted')setInstallVisible(false)}catch(e){}return}
+    var steps=isIOS?[T('Tap the Share button in Safari’s toolbar.'),T('Choose “Add to Home Screen”.'),T('Tap “Add”. Kiln now opens like an app.')]:[T('Open your browser menu (⋮ or …).'),T('Choose “Install Kiln” or “Apps → Install this site as an app”.'),T('Confirm. Kiln now has its own window and icon.')];
+    dialog({title:'Install Kiln',body:'<p>'+escH(T('Install Kiln to open it from your home screen or Start menu, in its own window, even without an internet connection.'))+'</p><ol>'+steps.map(function(x){return '<li>'+escH(x)+'</li>'}).join('')+'</ol>'});
+  }
+  $('installbtn').addEventListener('click',installApp);$('home-install').addEventListener('click',installApp);
+  // Ask the browser not to clear Kiln's storage when space runs low.
+  function keepStorage(){try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persisted().then(function(p){if(!p)navigator.storage.persist()})}catch(e){}}
+  if(isStandalone())keepStorage();
+  // Offline / online notices.
+  window.addEventListener('offline',function(){say('You are offline. Kiln keeps working; online features are paused.')});
+  window.addEventListener('online',function(){say('Back online.')});
+  // Service worker: offline support and updates.
+  if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){
+    var reloading=false;
+    navigator.serviceWorker.addEventListener('controllerchange',function(){if(reloading)return;reloading=true;flushSave().catch(function(){}).then(function(){location.reload()})});
+    var offerUpdate=function(worker){if(!worker||!navigator.serviceWorker.controller)return;ask(T('A new version of Kiln is available.'),function(){worker.postMessage('skip-waiting')},T('Update now'))};
+    window.addEventListener('load',function(){
+      navigator.serviceWorker.register('sw.js').then(function(reg){
+        if(reg.waiting)offerUpdate(reg.waiting);
+        reg.addEventListener('updatefound',function(){var w=reg.installing;if(w)w.addEventListener('statechange',function(){if(w.state==='installed')offerUpdate(w)})});
+        setInterval(function(){reg.update().catch(function(){})},60*60*1000);
+      }).catch(function(){});
+    });
+  }
+  // Files opened with Kiln from the desktop ("Open with → Kiln").
+  if('launchQueue' in window&&window.launchQueue&&launchQueue.setConsumer){
+    launchQueue.setConsumer(async function(params){
+      if(!params||!params.files||!params.files.length)return;
+      try{await idbLoadPromise}catch(e){}
+      if(!$('home').hidden)closeHome();
+      for(var h of params.files){try{var f=await h.getFile();await importDoc(f)}catch(e){say('Could not open the file: '+(e.message||''))}}
+    });
+  }
+  Object.assign(WRITER_DE,{'Install App':'App installieren','Install Kiln as an app on this device':'Kiln als App auf diesem Gerät installieren','⬇ Install Kiln':'⬇ Kiln installieren','Install Kiln':'Kiln installieren','Install Kiln to open it from your home screen or Start menu, in its own window, even without an internet connection.':'Installieren Sie Kiln, um es vom Startbildschirm oder Startmenü in einem eigenen Fenster zu öffnen – auch ohne Internetverbindung.','Tap the Share button in Safari’s toolbar.':'Tippen Sie in Safari auf die Teilen-Taste.','Choose “Add to Home Screen”.':'Wählen Sie „Zum Home-Bildschirm“.','Tap “Add”. Kiln now opens like an app.':'Tippen Sie auf „Hinzufügen“. Kiln öffnet sich jetzt wie eine App.','Open your browser menu (⋮ or …).':'Öffnen Sie das Browsermenü (⋮ oder …).','Choose “Install Kiln” or “Apps → Install this site as an app”.':'Wählen Sie „Kiln installieren“ oder „Apps → Diese Website als App installieren“.','Confirm. Kiln now has its own window and icon.':'Bestätigen Sie. Kiln hat jetzt ein eigenes Fenster und Symbol.','Kiln is installed. You can now open it from your apps.':'Kiln ist installiert. Sie können es jetzt über Ihre Apps öffnen.','You are offline. Kiln keeps working; online features are paused.':'Sie sind offline. Kiln funktioniert weiter; Online-Funktionen sind pausiert.','Back online.':'Wieder online.','A new version of Kiln is available.':'Eine neue Version von Kiln ist verfügbar.','Update now':'Jetzt aktualisieren'});
+  collectUiTranslations();renderUiLanguage();
   if(load('writer-comments-open')==='1')setComments(true);else renderComments();
-  if(load('kiln-home-startup')!=='off')openHome();
+  // App shortcuts and file launches choose what to show at startup.
+  var pwaAction=new URLSearchParams(location.search).get('action');
+  if(location.search&&history.replaceState)history.replaceState(null,'',location.pathname+location.hash);
+  if(pwaAction==='new')createFromTemplate('blank');
+  else if(pwaAction==='templates')openHome('templates');
+  else if(pwaAction!=='open-file'&&load('kiln-home-startup')!=='off')openHome();
   if(load('writer-nav')==='1')setNav(true);
   refreshDateFields();applyLayout();fit();schedulePaginate(true);state();count();writerHistoryReset();
 })();

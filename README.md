@@ -19,6 +19,7 @@ export PDF and Markdown, and keep everything private on your own device.
 ![No install](https://img.shields.io/badge/install-none-2e7d32)
 ![No account](https://img.shields.io/badge/account-not%20needed-2e7d32)
 ![Works offline](https://img.shields.io/badge/works-offline-6a1b9a)
+![Installable PWA](https://img.shields.io/badge/PWA-installable-5a0fc8)
 ![.docx](https://img.shields.io/badge/.docx-import%20%26%20export-1565c0)
 ![Languages](https://img.shields.io/badge/UI-English%20%7C%20Deutsch-ff9a3c)
 [![GitHub stars](https://img.shields.io/github/stars/Brickey8171/Kiln?style=flat&color=ffb400)](https://github.com/Brickey8171/Kiln/stargazers)
@@ -36,6 +37,7 @@ export PDF and Markdown, and keep everything private on your own device.
 - **One file, zero setup.** Double-click `index.html` or host it on GitHub Pages. No build step, no server, no sign-up.
 - **Feels like the office suite you know.** Ribbon with tabs, styles gallery, right-click menu, Mini Toolbar, status bar, keyboard shortcuts.
 - **Real Word compatibility.** Opens and saves `.docx` with headers & footers, tables, tracked changes, comments, footnotes, themes and more.
+- **Installs like a real app.** Add Kiln to your desktop, Start menu or home screen. It opens in its own window, works without internet, and can open `.docx` files directly.
 - **Private by default.** Your documents are stored in your browser and never uploaded anywhere.
 - **Bilingual.** Full English and German interface.
 
@@ -153,6 +155,23 @@ export PDF and Markdown, and keep everything private on your own device.
 
 Open **[brickey8171.github.io/Kiln](https://brickey8171.github.io/Kiln/)** — nothing to install.
 
+### Install it as an app
+
+Kiln is a **Progressive Web App**: once installed, it opens in its own window with its own icon and works fully offline.
+
+| Device | How to install |
+| --- | --- |
+| **Windows / macOS / Linux** (Chrome, Edge) | Open the live site and click **Install App** on the *File* tab, the ⬇ button on the start screen, or the install icon in the address bar |
+| **Android** (Chrome) | Open the live site → menu **⋮** → **Install app** |
+| **iPhone / iPad** (Safari) | Open the live site → **Share** → **Add to Home Screen** |
+
+Once installed you get:
+
+- 📴 **Offline use.** The whole app, including PDF export, is stored on your device.
+- 📂 **Open with Kiln.** On desktop, `.docx`, `.md`, `.txt` and `.html` files can be opened with Kiln straight from your file manager.
+- ⚡ **Shortcuts.** Right-click the app icon for *New blank document* or *Templates*.
+- 🔄 **Automatic updates.** When a new version is published, Kiln offers to update and keeps your open document safe.
+
 ### Use it locally
 
 1. Download **[`index.html`](https://github.com/Brickey8171/Kiln/raw/main/index.html)** (or clone the repo: `git clone https://github.com/Brickey8171/Kiln.git`).
@@ -167,7 +186,9 @@ You can also drag a `.docx`, `.md`, `.html` or `.txt` file onto the page to open
 2. Go to **Settings → Pages**, choose your branch and folder, and click **Save**.
 3. Your editor is live at `https://<your-username>.github.io/<repository>/`.
 
-No configuration is needed — Kiln is a static page.
+No configuration is needed — Kiln is a static page. Keep `manifest.webmanifest`, `sw.js` and the `icons/` folder next to `index.html` so it stays installable.
+
+> 🔄 **Publishing an update?** Change `VERSION` at the top of `sw.js` (e.g. `kiln-v1` → `kiln-v2`) whenever you change `index.html`, so installed copies download the new version.
 
 ## 🔒 Privacy
 
@@ -209,12 +230,21 @@ Kiln is plain HTML, CSS and JavaScript in one file, with no framework and no bui
 - **Word files** — a hand-written `.docx` reader and writer (OOXML) on top of the bundled [JSZip](https://stuk.github.io/jszip/)
 - **PDF** — pages rendered with [html2canvas](https://html2canvas.hertzen.com/) plus an invisible text layer, so text stays selectable and searchable
 - **Storage** — IndexedDB for documents and versions, localStorage for settings
+- **App** — a web app manifest and a small service worker (`sw.js`) for installing, offline use, file handling and updates
+
+```
+index.html             the whole editor
+manifest.webmanifest   app name, icons, shortcuts, file types
+sw.js                  offline cache and updates
+icons/                 app icons (regular, maskable, Apple)
+docs/                  README images
+```
 
 ## ⚠️ Known limitations
 
 - Very complex Word layouts (floating text boxes, section-specific page setups, embedded objects) are simplified on import.
 - Charts, SmartArt and shapes are saved to `.docx` as pictures — editable in Kiln, but not as native objects in Word.
-- PDF export needs an internet connection the first time, to load html2canvas.
+- If you open `index.html` straight from your disk instead of a website, Kiln works but can't be installed, and PDF export needs internet the first time.
 - Some browser shortcuts (e.g. <kbd>Ctrl</kbd>+<kbd>1</kbd>) can't be overridden by a web page.
 
 ## 🙏 Credits
