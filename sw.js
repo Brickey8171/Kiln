@@ -1,6 +1,6 @@
 /* Kiln service worker — makes Kiln installable and usable offline.
    Bump VERSION whenever index.html changes so installed apps pick up the update. */
-const VERSION = 'kiln-v1';
+const VERSION = 'kiln-v2';
 const SHELL = VERSION + '-shell';
 const RUNTIME = VERSION + '-runtime';
 
